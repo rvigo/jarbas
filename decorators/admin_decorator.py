@@ -8,9 +8,9 @@ def admin(func):
         if (update.effective_chat.type != 'private' and
                 user_id not in get_admin_ids(bot, update.message.chat_id)):
 
-            print("not an admin {}.".format(user_id))
+            print(f'not an admin {user_id}.')
             update.effective_message.reply_text(
-                "Você precisa ser um admin pra fazer isso")
+                'Você precisa ser um admin pra fazer isso')
             return
         return func(bot, update, *args, **kwargs)
     return wrapped
