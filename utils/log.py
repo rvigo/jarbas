@@ -1,39 +1,50 @@
 from functools import wraps
 from context.context import get_log_collection
+import logging
+import os
 import pytz
 
 timezone = pytz.timezone('America/Sao_Paulo')
 
-# log decorator
+# logging configs
+logging.basicConfig(format='%(asctime)s - %(name)s - %(process)d - %(levelname)s - %(message)s',
+                    datefmt='%d-%b-%y %H:%M:%S', level=os.environ['LOG_LEVEL'])
 
 
-def log(func):
+def log_decorator(func):
     @wraps(func)
     def wrapped(bot, update, *args, **kwargs):
         try:
-            Log(update)
+            log_update(update)
         except Exception as e:
-            print(f'ocorreu um erro ao logar: {e}')
+            log.error('ocorreu um erro ao logar', e)
 
         return func(bot, update, *args, **kwargs)
     return wrapped
 
+def log_update(update):
+    username = update.message.from_user.username
+    user_id = update.message.from_user.id
+    first_name = update.message.from_user.first_name
+    timestamp = update.message.date.astimezone(timezone)
+    text = update.message.text
+    chat_type = update.message.chat.type
+    chat_id = update.message.chat_id
+    group_title = update.message.chat.title
+    get_log_collection().insert_one({'timestamp': timestamp, 'first_name': first_name, 'username': username, 'user_id': user_id,
+                                        'chat_type': chat_type, 'title': group_title, 'text': text, 'chat_id': chat_id})
 
-class Log:
-    '''custom object to log 'update' requests'''
+def debug(message):
+    logging.debug(message)
 
-    def __init__(self, update):
-        self.username = update.message.from_user.username
-        self.user_id = update.message.from_user.id
-        self.first_name = update.message.from_user.first_name
-        self.timestamp = update.message.date.astimezone(timezone)
-        self.text = update.message.text
-        self.chat_type = update.message.chat.type
-        self.chat_id = update.message.chat_id
-        self.group_title = update.message.chat.title
-        # log itself when created
-        self.log()
+def info(message):
+    logging.info(message)
 
-    def log(self):
-        get_log_collection().insert_one({'timestamp': self.timestamp, 'first_name': self.first_name, 'username': self.username, 'user_id': self.user_id,
-                                         'chat_type': self.chat_type, 'title': self.group_title, 'text': self.text, 'chat_id': self.chat_id})
+def warning(message):
+    logging.warning(message)
+
+def error(message, ex=None):
+    if ex is None:
+        logging.error(message)
+    else:
+        logging.error(message, ex)

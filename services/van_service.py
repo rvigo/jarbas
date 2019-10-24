@@ -1,5 +1,6 @@
 from context.context import get_ceic_collection
 from services.transport import Transport
+from utils import log
 
 
 class VanService(Transport):
@@ -20,7 +21,8 @@ class VanService(Transport):
 
             go_res = self.next_items(lst_range, go_nearest_value, go_lst)
             back_res = self.next_items(lst_range, back_nearest_value, back_lst)
+            
             return f'CT > CEIC:\n{go_res}\nCEIC > CT:\n{back_res}'
 
         except Exception as e:
-            print(e)
+            log.error(e.message, e)

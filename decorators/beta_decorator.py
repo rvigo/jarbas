@@ -1,6 +1,6 @@
 from functools import wraps
 
-LIST_OF_ADMINS = [752671006]
+LIST_OF_ADMINS = [os.environ['ADMIN']]
 
 def beta(func):
     @wraps(func)

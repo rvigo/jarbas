@@ -8,6 +8,7 @@ from decorators.beta_decorator import beta
 from decorators.error_decorator import catch_error
 from decorators.restrict_decorator import restricted
 from decorators.chat_action_decorator import send_action
+from utils import log
 
 sys.path.insert(0, './vendored')
 
@@ -100,9 +101,10 @@ def webhook(event, context):
     try:
         update = Update.de_json(
             json.loads(event['body']), dispatcher.bot)
-
+        log.log_update(update)
+        log.debug(update)
         dispatcher.process_update(update)
     except Exception as e:
-        print(e)
+        log.error(e.message, e)
 
     return {'statusCode': 200}
