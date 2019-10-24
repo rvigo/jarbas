@@ -101,10 +101,12 @@ def webhook(event, context):
     try:
         update = Update.de_json(
             json.loads(event['body']), dispatcher.bot)
-        log.log_update(update)
-        log.debug(update)
+        
+        if update.message.entities and update.message.entities[0].type == 'bot_command':
+            log.log_update(update)
+            log.debug(update)
         dispatcher.process_update(update)
     except Exception as e:
-        log.error(e.message, e)
+        log.error(e)
 
     return {'statusCode': 200}

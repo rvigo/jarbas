@@ -1,5 +1,6 @@
 from functools import wraps
 from utils import log
+import os
 
 LIST_OF_ADMINS = [os.environ['ADMIN']]
 
