@@ -23,4 +23,4 @@ class BusService(Transport):
             return self.next_items(lst_range, nearest_value, time_lst)
 
         except Exception as e:
-            log.error(e.message, e)
+            log.error(e)

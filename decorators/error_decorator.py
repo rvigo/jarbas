@@ -32,6 +32,6 @@ def catch_error(func):
                                  parse_mode=ParseMode.HTML)
             update.effective_message.reply_text(
                 'Alguma coisa deu errado...\nPor favor tente novamente')
-            log.error(e.message, e)
+            log.error(e)
             raise
     return wrapped

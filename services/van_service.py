@@ -25,4 +25,4 @@ class VanService(Transport):
             return f'CT > CEIC:\n{go_res}\nCEIC > CT:\n{back_res}'
 
         except Exception as e:
-            log.error(e.message, e)
+            log.error(e)
