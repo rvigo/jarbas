@@ -1,4 +1,5 @@
 from functools import wraps
+from utils import log
 
 
 def admin(func):
@@ -8,7 +9,7 @@ def admin(func):
         if (update.effective_chat.type != 'private' and
                 user_id not in get_admin_ids(bot, update.message.chat_id)):
 
-            print(f'not an admin {user_id}.')
+            log.debug(f'not an admin {user_id}.')
             update.effective_message.reply_text(
                 'Você precisa ser um admin pra fazer isso')
             return

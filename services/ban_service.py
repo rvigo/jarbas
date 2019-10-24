@@ -2,6 +2,7 @@ import os
 import sys
 import random
 from decorators.admin_decorator import get_admin_ids
+from utils import log
 
 here = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(here, '../vendored'))
@@ -73,8 +74,8 @@ def ban(bot, update, args):
         elif excp.message == 'User is an administrator of the chat':
             message.reply_text('Eu não posso banir outro admin.')
         else:
-            print(
-                f'ERROR banning user {user_id} in chat {chat.title} ({chat.id}) due to {excp.message}')
+            log.error(
+                f'ERROR banning user {user_id} in chat {chat.title} ({chat.id}) due to {excp.message}', excp)
             message.reply_text('Não consigo banir esse cara...')
 
     return

@@ -2,6 +2,7 @@ from functools import wraps
 import sys
 import os
 import traceback
+from utils import log
 
 sys.path.insert(0, './vendored')
 
@@ -9,7 +10,7 @@ from telegram.utils.helpers import mention_html
 from telegram import ParseMode
 
 
-LIST_OF_ADMINS = [752671006]
+LIST_OF_ADMINS = [os.environ['ADMIN']]
 
 
 def catch_error(func):
@@ -31,5 +32,6 @@ def catch_error(func):
                                  parse_mode=ParseMode.HTML)
             update.effective_message.reply_text(
                 'Alguma coisa deu errado...\nPor favor tente novamente')
+            log.error(e.message, e)
             raise
     return wrapped

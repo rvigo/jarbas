@@ -1,6 +1,7 @@
 from context.context import get_ct_collection
 from services.transport import Transport
 from datetime import datetime
+from utils import log
 
 
 class BusService(Transport):
@@ -22,4 +23,4 @@ class BusService(Transport):
             return self.next_items(lst_range, nearest_value, time_lst)
 
         except Exception as e:
-            print(e)
+            log.error(e.message, e)

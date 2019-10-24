@@ -1,6 +1,7 @@
 from bisect import bisect_left
 from datetime import datetime
 import pytz
+from utils import log
 
 timezone = pytz.timezone('America/Sao_Paulo')
 
@@ -21,10 +22,11 @@ class Transport:
                     return f'{rng} não dá, né amigão...'
             else:
                 rng = 1
-
             return self.next_departure(tg_timestamp, rng)
         except (TypeError, ValueError):
-            return 'o parametro tem que ser um número...'
+            error_msg = 'o parametro tem que ser um número...'
+            log.error(error_msg)
+            return error_msg
 
     def nearest_time(self, time, times):
         '''find the next time base on telegram datetime'''
@@ -34,7 +36,8 @@ class Transport:
         if pos == len(times):
             return times[-1]
         after = times[pos]
-
+        
+        log.debug(f'pos {pos}, after: {after}')
         return after
 
     # rng = value range
