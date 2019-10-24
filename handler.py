@@ -1,5 +1,6 @@
 import json
-import os, sys
+import os
+import sys
 from services import van_service, bus_service, d20_service, react_service, birthday_service, ban_service
 from datetime import datetime
 from decorators.admin_decorator import admin
@@ -7,14 +8,13 @@ from decorators.beta_decorator import beta
 from decorators.error_decorator import catch_error
 from decorators.restrict_decorator import restricted
 from decorators.chat_action_decorator import send_action
-from utils.log import Log
 
 sys.path.insert(0, './vendored')
 
-from telegram.ext import CommandHandler, Dispatcher
-from telegram import Bot, Update, Message, User
-import telegram
 import requests
+import telegram
+from telegram import Bot, Update, Message, User
+from telegram.ext import CommandHandler, Dispatcher
 
 
 TOKEN = os.environ['TELEGRAM_TOKEN']
@@ -100,10 +100,8 @@ def webhook(event, context):
     try:
         update = Update.de_json(
             json.loads(event['body']), dispatcher.bot)
-        dispatcher.process_update(update)
-        # log the request
-        Log(update)
 
+        dispatcher.process_update(update)
     except Exception as e:
         print(e)
 
