@@ -1,6 +1,7 @@
 import json
-import os, sys
-from services import bus_service, d20_service, react_service, birthday_service, ban_service
+import os
+import sys
+from services import van_service, bus_service, d20_service, react_service, birthday_service, ban_service
 from datetime import datetime
 from decorators.admin_decorator import admin
 from decorators.beta_decorator import beta
@@ -8,15 +9,12 @@ from decorators.error_decorator import catch_error
 from decorators.restrict_decorator import restricted
 from decorators.chat_action_decorator import send_action
 
-here = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(here, "../vendored"))
+sys.path.insert(0, './vendored')
 
-from telegram.ext import CommandHandler, Dispatcher
-from telegram import Bot, Update, Message, User
-import telegram
 import requests
-
-# sys.path.insert(0, './vendored')
+import telegram
+from telegram import Bot, Update, Message, User
+from telegram.ext import CommandHandler, Dispatcher
 
 
 TOKEN = os.environ['TELEGRAM_TOKEN']
@@ -26,8 +24,8 @@ send_typing_action = send_action(telegram.ChatAction.TYPING)
 @catch_error
 @send_typing_action
 def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="Olá {}, eu sou o Jarbas!".format(
-        update.message.from_user.first_name))
+    bot.send_message(chat_id=update.message.chat_id,
+                     text=f'Olá {update.message.from_user.first_name}, eu sou o Jarbas!')
 
 
 @catch_error
@@ -35,7 +33,15 @@ def start(bot, update):
 def bus_schedule(bot, update, args):
     telegram_timestamp = update.message.date
     update.effective_message.reply_text(
-        bus_service.validate_request(telegram_timestamp, args))
+        bus_service.BusService().validate_request(telegram_timestamp, args))
+
+
+@catch_error
+@send_typing_action
+def van_schedule(bot, update, args):
+    telegram_timestamp = update.message.date
+    update.effective_message.reply_text(
+        van_service.VanService().validate_request(telegram_timestamp, args))
 
 
 @catch_error
@@ -47,7 +53,7 @@ def d20(bot, update):
 @catch_error
 @restricted
 def healthcheck(bot, update):
-    update.effective_message.reply_text("200 - ok")
+    update.effective_message.reply_text('200 - ok')
 
 
 @catch_error
@@ -78,6 +84,7 @@ def setup(token):
 
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('bus', bus_schedule, pass_args=True))
+    dispatcher.add_handler(CommandHandler('van', van_schedule, pass_args=True))
     dispatcher.add_handler(CommandHandler('d20', d20))
     dispatcher.add_handler(CommandHandler('health', healthcheck))
     dispatcher.add_handler(CommandHandler('react', react))
@@ -91,10 +98,11 @@ def setup(token):
 def webhook(event, context):
     dispatcher = setup(TOKEN)
     try:
-        dispatcher.process_update(Update.de_json(
-            json.loads(event["body"]), dispatcher.bot))
+        update = Update.de_json(
+            json.loads(event['body']), dispatcher.bot)
 
+        dispatcher.process_update(update)
     except Exception as e:
         print(e)
 
-    return {"statusCode": 200}
+    return {'statusCode': 200}

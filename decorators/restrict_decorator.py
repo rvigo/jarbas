@@ -7,7 +7,7 @@ def restricted(func):
     def wrapped(bot, update, *args, **kwargs):
         user_id = update.message.from_user.id
         if user_id not in LIST_OF_ADMINS:
-            print("Unauthorized access denied for {}.".format(user_id))
+            print(f'Unauthorized access denied for {user_id}.')
             return
         return func(bot, update, *args, **kwargs)
     return wrapped

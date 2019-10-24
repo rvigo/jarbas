@@ -3,16 +3,16 @@ import sys
 import random
 
 here = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(here, "../vendored"))
+sys.path.append(os.path.join(here, '../vendored'))
 
 from telegram import Bot, Update, Message
 
 
 MESSAGES = (
-    "Parabéns, {}!",
-    "{}, felicidades! ",
-    "{}, te desejo tudo de bom!",
-    "Sucesso, {}!"
+    'Parabéns, {}!',
+    '{}, felicidades! ',
+    '{}, te desejo tudo de bom!',
+    'Sucesso, {}!'
 )
 
 
@@ -24,4 +24,4 @@ def birthday(bot, update, args):
                          text=(bdaymessage.format(username)))
     else:
         update.effective_message.reply_text(
-            "Você precisa me dizer quem está fazendo aniversário")
+            'Você precisa me dizer quem está fazendo aniversário')

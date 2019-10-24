@@ -2,8 +2,7 @@ import os
 import sys
 import inspect
 
-here = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(here, "../vendored"))
+sys.path.insert(0, './vendored')
 
 import urllib
 from pymongo import MongoClient
@@ -18,5 +17,12 @@ def getDb():
     return db
 
 
-def get_collection():
-    return getDb().get_collection(os.environ['COLLECTION'])
+def get_ct_collection():
+    return getDb().get_collection(os.environ['CT_COLLECTION'])
+
+def get_ceic_collection():
+    return getDb().get_collection(os.environ['CEIC_COLLECTION'])
+
+def get_log_collection():
+    return getDb().get_collection(os.environ['LOG_COLLECTION'])
+
