@@ -50,6 +50,8 @@ provider:
     CEIC_COLLECTION: ${env:CEIC_COLLECTION}
     LOG_COLLECTION: ${env:LOG_COLLECTION}
     MONGO_URI: ${env:MONGO_URI}
+    LOG_LEVEL: ${env:LOG_LEVEL}
+    ADMIN: ${env:ADMIN}
 
 
 # you can add packaging information here
